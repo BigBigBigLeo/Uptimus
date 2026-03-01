@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+export const dynamic = 'force-dynamic';
 import DispatchClient from './DispatchClient';
 import DispatchLogClient from './DispatchLogClient';
 import Link from 'next/link';

@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+export const dynamic = 'force-dynamic';
 import { notFound } from 'next/navigation';
 import styles from './detail.module.css';
 import ChargerActionsClient from './ChargerActionsClient';

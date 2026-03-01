@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+export const dynamic = 'force-dynamic';
 import ChargerListClient from './ChargerListClient';
 import styles from './chargers.module.css';
 import { Zap, Activity, ShieldCheck } from 'lucide-react';

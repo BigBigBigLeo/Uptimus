@@ -1,4 +1,5 @@
 import { Users, Filter, Download } from 'lucide-react';
+export const dynamic = 'force-dynamic';
 import { PrismaClient } from '@prisma/client';
 import NetworkMap from '../../components/MapWrapper';
 import TechnicianListClient from './TechnicianListClient';
