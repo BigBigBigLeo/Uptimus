@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uptimus Network Orchestration | Full Demo</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        :root {
+            --color-bg: #0b0c10;
+            --color-surface: #1f2833;
+            --color-surface-hover: #2c3a47;
+            --color-primary: #45a29e;
+            --color-primary-light: #66fcf1;
+            --color-text-primary: #f8fafc;
+            --color-text-secondary: #94a3b8;
+            --glass-bg: rgba(31, 40, 51, 0.75);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-blur: blur(20px);
+            --color-status-success: #10b981;
+            --color-status-warning: #f59e0b;
+            --color-status-error: #ef4444;
+            --color-status-offline: #6b7280;
+            --font-family-base: 'Inter', system-ui, -apple-system, sans-serif;
+            --sidebar-width: 260px;
+            --header-height: 70px;
+            --spacing-md: 16px;
+            --spacing-lg: 24px;
+            --border-radius-lg: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--color-bg);
+            background-image:
+                radial-gradient(ellipse at top right, rgba(69, 162, 158, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at bottom left, rgba(139, 92, 246, 0.08) 0%, transparent 50%);
+            background-attachment: fixed;
+            color: var(--color-text-primary);
+            font-family: var(--font-family-base);
+            min-height: 100vh;
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: var(--glass-bg);
+            border-right: 1px solid var(--glass-border);
+            backdrop-filter: var(--glass-blur);
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding: 32px 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .logo {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            color: var(--color-bg);
+        }
+
+        .sidebar-nav {
+            padding: 24px 12px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            color: var(--color-text-secondary);
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .nav-item:hover {
+            color: var(--color-text-primary);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-item.active {
+            color: var(--color-primary-light);
+            background: rgba(69, 162, 158, 0.1);
+        }
+
+        .nav-item svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            flex: 1;
+            height: 100vh;
+            overflow-y: auto;
+            position: relative;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .top-bar {
+            height: var(--header-height);
+            padding: 0 var(--spacing-lg);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(11, 12, 16, 0.4);
+            border-bottom: 1px solid var(--glass-border);
+            backdrop-filter: blur(8px);
+            position: sticky;
+            top: 0;
+            z-index: 900;
+        }
+
+        .content-container {
+            padding: var(--spacing-lg);
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* CARDS & UI ELEMENTS */
+        .card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius-lg);
+            padding: 24px;
+            backdrop-filter: var(--glass-blur);
+            margin-bottom: 24px;
+        }
+
+        .card-header {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--color-text-primary);
+        }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .kpi-card {
+            padding: 20px;
+        }
+
+        .kpi-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--color-primary-light);
+            margin: 8px 0;
+        }
+
+        .kpi-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--color-text-secondary);
+            letter-spacing: 0.05em;
+        }
+
+        .btn {
+            background: var(--color-primary);
+            color: var(--color-bg);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .btn:hover {
+            background: var(--color-primary-light);
+            transform: translateY(-1px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--color-primary);
+            color: var(--color-primary);
+        }
+
+        .btn-outline:hover {
+            background: rgba(69, 162, 158, 0.1);
+        }
+
+        /* LISTS & TABLES */
+        .table-container {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table-container th {
+            text-align: left;
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--glass-border);
+            color: var(--color-text-secondary);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        .table-container td {
+            padding: 16px;
+            border-bottom: 1px solid var(--glass-border);
+            font-size: 0.95rem;
+        }
+
+        .tr:hover {
+            background: rgba(255, 255, 255, 0.02);
+            cursor: pointer;
+        }
+
+        .status-pill {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .status-available {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--color-status-success);
+        }
+
+        .status-faulted {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--color-status-error);
+        }
+
+        .status-offline {
+            background: rgba(107, 114, 128, 0.1);
+            color: var(--color-text-secondary);
+        }
+
+        /* SLIDE OVER */
+        .overlay {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 480px;
+            background: var(--color-surface);
+            border-left: 1px solid var(--glass-border);
+            z-index: 2000;
+            padding: 32px;
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+            transform: translateX(100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-y: auto;
+        }
+
+        .overlay.active {
+            transform: translateX(0);
+        }
+
+        .backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1900;
+            display: none;
+            backdrop-filter: blur(4px);
+        }
+
+        .backdrop.active {
+            display: block;
+        }
+
+        /* MAP ELEMENTS */
+        .map-box {
+            height: 360px;
+            background: rgba(30, 41, 59, 0.3);
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+        }
+
+        .map-dot {
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            box-shadow: 0 0 10px currentColor;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .map-dot:hover {
+            transform: scale(1.4);
+            z-index: 10;
+        }
+
+        /* ASSETS */
+        .tech-pic {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--color-surface-hover);
+            border: 1px solid var(--glass-border);
+            object-fit: cover;
+        }
+
+        /* CHART SIMULATION */
+        .chart-sim {
+            height: 160px;
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
+            padding-top: 20px;
+        }
+
+        .chart-bar {
+            flex: 1;
+            background: var(--color-primary);
+            border-radius: 4px 4px 0 0;
+            min-height: 20px;
+            transition: height 0.6s ease;
+        }
+
+        @media (max-width: 900px) {
+            .sidebar {
+                position: fixed;
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            --sidebar-width: 100%;
+
+            .overlay {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">U</div>
+            <h2 style="font-size: 1.25rem; letter-spacing: -0.5px;">Uptimus</h2>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="nav-item active" onclick="navigate('dashboard')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="9"></rect>
+                    <rect x="14" y="3" width="7" height="5"></rect>
+                    <rect x="14" y="12" width="7" height="9"></rect>
+                    <rect x="3" y="16" width="7" height="5"></rect>
+                </svg>
+                Dashboard
+            </div>
+            <div class="nav-item" onclick="navigate('chargers')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18.12 13.35L12.06 6l-6.07 7.35"></path>
+                    <path d="M12 17V7"></path>
+                    <path d="M12 17v-1"></path>
+                    <circle cx="12" cy="12" r="10"></circle>
+                </svg>
+                Chargers
+            </div>
+            <div class="nav-item" onclick="navigate('technicians')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+                Technicians
+            </div>
+            <div class="nav-item" onclick="navigate('predictive')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path
+                        d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
+                    </path>
+                    <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                    <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                </svg>
+                Predictive AI
+            </div>
+            <div class="nav-item" onclick="navigate('tracking')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                Live Tracking
+            </div>
+        </nav>
+    </aside>
+
+    <!-- CONTENT -->
+    <main class="main-content">
+        <div class="top-bar">
+            <h3 id="current-page-title">Network Dashboard</h3>
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <span style="font-size: 0.8rem; color: var(--color-status-success);">● System Online</span>
+                <div
+                    style="width: 32px; height: 32px; background: var(--color-surface-hover); border-radius: 50%; border: 1px solid var(--glass-border);">
+                </div>
+            </div>
+        </div>
+
+        <div class="content-container">
+            <!-- DASHBOARD SECTION -->
+            <section id="dashboard" class="section active">
+                <div class="kpi-grid">
+                    <div class="card kpi-card">
+                        <div class="kpi-label">Network MTTR</div>
+                        <div class="kpi-value">28.4 <small style="font-size: 0.8rem;">HRS</small></div>
+                        <p style="font-size: 0.7rem; color: var(--color-status-success);">↓ 12% from last month</p>
+                    </div>
+                    <div class="card kpi-card">
+                        <div class="kpi-label">System Uptime</div>
+                        <div class="kpi-value">98.7%</div>
+                        <p style="font-size: 0.7rem; color: var(--color-status-success);">Above SLA Target 🎯</p>
+                    </div>
+                    <div class="card kpi-card">
+                        <div class="kpi-label">Active Tickets</div>
+                        <div class="kpi-value">142</div>
+                        <p style="font-size: 0.7rem; color: var(--color-status-warning);">12 High Priority</p>
+                    </div>
+                    <div class="card kpi-card">
+                        <div class="kpi-label">AI Predictions</div>
+                        <div class="kpi-value">9</div>
+                        <p style="font-size: 0.7rem; color: var(--color-primary-light);">Upcoming Preventive Tasks</p>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px;">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Infrastructure Snapshot</h3>
+                            <button class="btn btn-outline" style="padding: 4px 10px; font-size: 0.75rem;">View
+                                Clusters</button>
+                        </div>
+                        <div class="map-box" id="dashboard-map"></div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Fault Distribution</h3>
+                        </div>
+                        <div class="chart-sim" id="dashboard-chart"></div>
+                        <div
+                            style="margin-top: 20px; display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--color-text-secondary);">
+                            <span>JAN</span><span>FEB</span><span>MAR</span><span>APR</span><span>MAY</span><span>JUN</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CHARGERS SECTION -->
+            <section id="chargers" class="section">
+                <div class="card" style="padding: 0; overflow: hidden;">
+                    <table class="table-container">
+                        <thead>
+                            <tr>
+                                <th>Status</th>
+                                <th>Station ID</th>
+                                <th>Location</th>
+                                <th>Brand / Model</th>
+                                <th>Power</th>
+                                <th>Tier</th>
+                            </tr>
+                        </thead>
+                        <tbody id="charger-rows"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- TECHNICIANS SECTION -->
+            <section id="technicians" class="section">
+                <div class="card" style="padding: 0; overflow: hidden;">
+                    <table class="table-container">
+                        <thead>
+                            <tr>
+                                <th>Technician</th>
+                                <th>Contractor</th>
+                                <th>City</th>
+                                <th>Availability</th>
+                                <th>MTTR</th>
+                                <th>Rating</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tech-rows"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- PREDICTIVE SECTION -->
+            <section id="predictive" class="section">
+                <div class="kpi-grid">
+                    <div class="card kpi-card">
+                        <div class="kpi-label">Neural Scans</div>
+                        <div class="kpi-value">1,248</div>
+                    </div>
+                    <div class="card kpi-card" style="border-color: var(--color-status-error);">
+                        <div class="kpi-label">Critical Risks</div>
+                        <div class="kpi-value" style="color: var(--color-status-error);">3</div>
+                    </div>
+                    <div class="card kpi-card">
+                        <div class="kpi-label">Est. Savings</div>
+                        <div class="kpi-value">€12.5k</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3 class="card-title" style="margin-bottom: 20px;">AI High-Risk Prediction Feed</h3>
+                    <div id="predictive-feed"></div>
+                </div>
+            </section>
+
+            <!-- TRACKING SECTION -->
+            <section id="tracking" class="section">
+                <div class="card" style="height: 600px; display: flex; gap: 24px; padding: 0;">
+                    <div style="flex: 1; border-right: 1px solid var(--glass-border);" id="tracking-map"></div>
+                    <div style="width: 320px; padding: 24px;">
+                        <h3 class="card-title">Dispatch Event Log</h3>
+                        <div id="tracking-log"
+                            style="margin-top: 20px; font-size: 0.85rem; color: var(--color-text-secondary); height: 480px; overflow-y: auto;">
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- OVERLAYS -->
+    <div class="backdrop" id="backdrop" onclick="closeOverlay()"></div>
+    <div class="overlay" id="detail-overlay">
+        <div id="detail-content"></div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script>
+        const MOCK_DATA = {
+            chargers: [
+                { id: 'CHG-DE-4921', brand: 'Alpitronic', model: 'HYC300', city: 'Berlin', country: 'DE', status: 'Available', power: '300kW', tier: 'Premium', lat: 30, lng: 40 },
+                { id: 'CHG-DE-1030', brand: 'ABB', model: 'Terra 54', city: 'Hamburg', country: 'DE', status: 'Faulted', power: '50kW', tier: 'Standard', lat: 45, lng: 20 },
+                { id: 'CHG-NL-5503', brand: 'Alpitronic', model: 'HYC300', city: 'Utrecht', country: 'NL', status: 'Offline', power: '300kW', tier: 'Critical', lat: 60, lng: 70 },
+                { id: 'CHG-BE-2204', brand: 'Alpitronic', model: 'HYC150', city: 'Antwerp', country: 'BE', status: 'Available', power: '150kW', tier: 'Premium', lat: 75, lng: 55 },
+                { id: 'CHG-DE-4925', brand: 'Siemens', model: 'Sicharge', city: 'Munich', country: 'DE', status: 'Available', power: '160kW', tier: 'Standard', lat: 20, lng: 80 }
+            ],
+            techs: [
+                { name: 'Hans Müller', company: 'PowerGrid DE', city: 'Berlin', available: false, mttr: '25.1h', rating: '4.9', pic: 'HM' },
+                { name: 'Klaus Wagner', company: 'PowerGrid DE', city: 'Berlin', available: true, mttr: '19.5h', rating: '4.8', pic: 'KW' },
+                { name: 'Jan de Vries', company: 'EcoFix NL', city: 'Amsterdam', available: true, mttr: '21.8h', rating: '4.7', pic: 'JV' },
+                { name: 'Luc Peeters', company: 'ChargeFast BE', city: 'Brussels', available: false, mttr: '20.4h', rating: '4.9', pic: 'LP' }
+            ],
+            predictions: [
+                { id: 'CHG-DE-1030', component: 'DC Contactor Arc', risk: 94, action: 'Immediate Swap', color: '#ef4444' },
+                { id: 'CHG-NL-5503', component: 'Cooling Pump v2', risk: 78, action: 'Fluid Service', color: '#f59e0b' },
+                { id: 'CHG-DE-4921', component: 'RFID Module', risk: 42, action: 'Routine Check', color: '#3b82f6' }
+            ]
+        };
+
+        function navigate(pageId) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+
+            document.getElementById(pageId).classList.add('active');
+            event.currentTarget.classList.add('active');
+
+            document.getElementById('current-page-title').innerText = pageId.charAt(0).toUpperCase() + pageId.slice(1) + ' Control';
+
+            if (pageId === 'dashboard') initDashboard();
+            if (pageId === 'chargers') renderChargers();
+            if (pageId === 'technicians') renderTechs();
+            if (pageId === 'predictive') renderPredictions();
+            if (pageId === 'tracking') startTracking();
+        }
+
+        function initDashboard() {
+            const chart = document.getElementById('dashboard-chart');
+            const data = [45, 60, 40, 85, 30, 95];
+            chart.innerHTML = '';
+            data.forEach(h => {
+                const bar = document.createElement('div');
+                bar.className = 'chart-bar';
+                chart.appendChild(bar);
+                setTimeout(() => bar.style.height = h + '%', 100);
+            });
+
+            const map = document.getElementById('dashboard-map');
+            map.innerHTML = '';
+            MOCK_DATA.chargers.forEach(c => {
+                const dot = document.createElement('div');
+                dot.className = 'map-dot';
+                dot.style.backgroundColor = c.status === 'Available' ? 'var(--color-status-success)' : (c.status === 'Faulted' ? 'var(--color-status-error)' : 'var(--color-status-offline)');
+                dot.style.color = dot.style.backgroundColor;
+                dot.style.left = c.lng + '%';
+                dot.style.top = c.lat + '%';
+                dot.onclick = () => showCharger(c.id);
+                map.appendChild(dot);
+            });
+        }
+
+        function renderChargers() {
+            const tbody = document.getElementById('charger-rows');
+            tbody.innerHTML = '';
+            MOCK_DATA.chargers.forEach(c => {
+                const tr = document.createElement('tr');
+                tr.className = 'tr';
+                tr.onclick = () => showCharger(c.id);
+                tr.innerHTML = `
+                    <td><span class="status-pill status-${c.status.toLowerCase()}">${c.status}</span></td>
+                    <td style="font-weight: 700;">${c.id}</td>
+                    <td>${c.city}, ${c.country}</td>
+                    <td>${c.brand} ${c.model}</td>
+                    <td>${c.power}</td>
+                    <td><span style="font-size: 0.7rem; color: var(--color-text-secondary); border: 1px solid var(--glass-border); padding: 2px 6px; border-radius: 4px;">${c.tier}</span></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function renderTechs() {
+            const tbody = document.getElementById('tech-rows');
+            tbody.innerHTML = '';
+            MOCK_DATA.techs.forEach(t => {
+                const tr = document.createElement('tr');
+                tr.className = 'tr';
+                tr.onclick = () => showTech(t.name);
+                tr.innerHTML = `
+                    <td style="display: flex; align-items: center; gap: 12px;">
+                        <div class="tech-pic" style="display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 700;">${t.pic}</div>
+                        <span style="font-weight: 600;">${t.name}</span>
+                    </td>
+                    <td>${t.company}</td>
+                    <td>${t.city}</td>
+                    <td style="color: ${t.available ? 'var(--color-status-success)' : 'var(--color-status-error)'}; font-weight: 600;">${t.available ? 'Available' : 'On Site'}</td>
+                    <td>${t.mttr}</td>
+                    <td style="color: var(--color-status-warning);">★ ${t.rating}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function renderPredictions() {
+            const feed = document.getElementById('predictive-feed');
+            feed.innerHTML = '';
+            MOCK_DATA.predictions.forEach(p => {
+                feed.innerHTML += `
+                    <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border); padding: 16px; border-radius: 10px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-weight: 700; font-size: 1rem;">${p.id}</div>
+                            <div style="font-size: 0.8rem; color: var(--color-text-secondary); margin-top: 4px;">FLAGGED: ${p.component}</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 1.25rem; font-weight: 700; color: ${p.color};">${p.risk}%</div>
+                            <div style="font-size: 0.6rem; color: var(--color-text-secondary);">CONFIDENCE</div>
+                        </div>
+                        <button class="btn btn-outline" style="border-color: ${p.color}; color: ${p.color};">${p.action}</button>
+                    </div>
+                `;
+            });
+        }
+
+        let trackInterval;
+        function startTracking() {
+            const map = document.getElementById('tracking-map');
+            const log = document.getElementById('tracking-log');
+            map.innerHTML = '<div style="display: flex; justify-content: center; align-items: center; height: 100%; color: var(--color-text-secondary);">Live Tracking Simulation Active...</div>';
+            log.innerHTML = '';
+
+            const events = [
+                '[09:00] Ticket #4921 assigned to H. Müller',
+                '[09:05] Technician en route to Berlin station',
+                '[09:12] High traffic detected on Friedrichstraße',
+                '[09:25] Technician arrived on site',
+                '[09:30] Diagnostic scan initiated...',
+                '[09:35] Fault confirmed: Liquid cooling blockage',
+                '[09:40] Replacing pump unit...',
+                '[10:05] Repair completed. Running integrity tests.',
+                '[10:15] System testing PASSED. Station online.'
+            ];
+
+            let i = 0;
+            clearInterval(trackInterval);
+            trackInterval = setInterval(() => {
+                if (i < events.length) {
+                    const div = document.createElement('div');
+                    div.style.padding = '8px 0';
+                    div.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
+                    div.innerText = events[i];
+                    log.prepend(div);
+                    i++;
+                } else {
+                    clearInterval(trackInterval);
+                }
+            }, 3000);
+        }
+
+        function showCharger(id) {
+            const c = MOCK_DATA.chargers.find(x => x.id === id);
+            const overlay = document.getElementById('detail-overlay');
+            const content = document.getElementById('detail-content');
+
+            content.innerHTML = `
+                <h2 style="font-size: 1.5rem; margin-bottom: 8px;">${c.id}</h2>
+                <span class="status-pill status-${c.status.toLowerCase()}">${c.status}</span>
+                <hr style="margin: 20px 0; border: 0; border-top: 1px solid var(--glass-border);">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <div><label style="font-size: 0.7rem; color: var(--color-text-secondary);">BRAND</label><p>${c.brand}</p></div>
+                    <div><label style="font-size: 0.7rem; color: var(--color-text-secondary);">MODEL</label><p>${c.model}</p></div>
+                    <div><label style="font-size: 0.7rem; color: var(--color-text-secondary);">CITY</label><p>${c.city}</p></div>
+                    <div><label style="font-size: 0.7rem; color: var(--color-text-secondary);">SLA TIER</label><p>${c.tier}</p></div>
+                </div>
+                <div style="margin-top: 32px;">
+                    <h3>Telemetry Pulse</h3>
+                    <div class="chart-sim" style="height: 100px;">
+                        <div class="chart-bar" style="height: 40%"></div>
+                        <div class="chart-bar" style="height: 45%"></div>
+                        <div class="chart-bar" style="height: 42%"></div>
+                        <div class="chart-bar" style="height: 48%"></div>
+                    </div>
+                </div>
+                <button class="btn" style="width: 100%; margin-top: 40px; justify-content: center;">Run Diagnostics</button>
+            `;
+
+            openOverlay();
+        }
+
+        function showTech(name) {
+            const t = MOCK_DATA.techs.find(x => x.name === name);
+            const overlay = document.getElementById('detail-overlay');
+            const content = document.getElementById('detail-content');
+
+            content.innerHTML = `
+                <div style="text-align: center;">
+                    <div style="width: 80px; height: 80px; background: var(--color-surface-hover); border-radius: 50%; margin: 0 auto 16px; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 700;">${t.pic}</div>
+                    <h2 style="font-size: 1.5rem;">${t.name}</h2>
+                    <p style="color: var(--color-text-secondary);">${t.company}</p>
+                </div>
+                <hr style="margin: 24px 0; border: 0; border-top: 1px solid var(--glass-border);">
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <div style="background: rgba(0,0,0,0.2); padding: 12px; border-radius: 8px;">
+                        <label style="font-size: 0.65rem; color: var(--color-text-secondary); font-weight: 700;">AVAILABILITY</label>
+                        <p style="color: ${t.available ? 'var(--color-status-success)' : 'var(--color-status-error)'}; font-weight: 700;">${t.available ? 'AVAILABLE' : 'CURRENTLY ON TASK'}</p>
+                    </div>
+                    <div style="background: rgba(0,0,0,0.2); padding: 12px; border-radius: 8px;">
+                        <label style="font-size: 0.65rem; color: var(--color-text-secondary); font-weight: 700;">AVG MTTR</label>
+                        <p>${t.mttr}</p>
+                    </div>
+                    <div style="background: rgba(0,0,0,0.2); padding: 12px; border-radius: 8px;">
+                        <label style="font-size: 0.65rem; color: var(--color-text-secondary); font-weight: 700;">RATING</label>
+                        <p style="color: var(--color-status-warning);">★ ${t.rating} / 5.0</p>
+                    </div>
+                </div>
+                <button class="btn" style="width: 100%; margin-top: 40px; justify-content: center;">Dispatch Signal</button>
+            `;
+
+            openOverlay();
+        }
+
+        function openOverlay() {
+            document.getElementById('detail-overlay').classList.add('active');
+            document.getElementById('backdrop').classList.add('active');
+        }
+
+        function closeOverlay() {
+            document.getElementById('detail-overlay').classList.remove('active');
+            document.getElementById('backdrop').classList.remove('active');
+        }
+
+        // Initialize first page
+        navigate('dashboard');
+    </script>
+</body>
+
+</html>
