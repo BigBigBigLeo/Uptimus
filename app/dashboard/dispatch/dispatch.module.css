@@ -1,0 +1,312 @@
+.container {
+    display: flex;
+    gap: var(--spacing-xl);
+    min-height: 700px;
+}
+
+.summaryPanel {
+    flex: 1;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-surface-hover);
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-xl);
+    display: flex;
+    flex-direction: column;
+}
+
+.ticketBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background-color: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    width: fit-content;
+    margin-bottom: var(--spacing-md);
+}
+
+.ticketTitle {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-lg);
+}
+
+.ticketDetails {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+}
+
+.detailRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 1px dashed var(--color-surface-hover);
+}
+
+.detailRow span {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.detailRow strong {
+    font-size: 1rem;
+    color: var(--color-text-primary);
+}
+
+.slaAlert {
+    color: #f59e0b !important;
+    display: flex;
+    align-items: center;
+}
+
+.triageBox {
+    background: linear-gradient(145deg, rgba(59, 130, 246, 0.1), transparent);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-lg);
+}
+
+.triageHeader {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #3b82f6;
+    font-weight: 600;
+    margin-bottom: var(--spacing-sm);
+}
+
+.triageText {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+    margin-bottom: var(--spacing-md);
+}
+
+.triagePills {
+    display: flex;
+    gap: 8px;
+}
+
+.pill {
+    font-size: 0.7rem;
+    border: 1px solid #3b82f6;
+    color: #3b82f6;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-weight: 600;
+}
+
+/* RIGHT PANEL */
+.rankingPanel {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+}
+
+.rankingPanel h3 {
+    font-size: 1.3rem;
+    margin-bottom: 4px;
+}
+
+.subtext {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-lg);
+}
+
+.techList {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.techCard {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-surface-hover);
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-lg);
+    display: flex;
+    align-items: center;
+    position: relative;
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.techCard:hover {
+    transform: translateX(4px);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.topMatch {
+    border: 1px solid rgba(59, 130, 246, 0.6);
+    background: linear-gradient(to right, rgba(59, 130, 246, 0.05), transparent);
+}
+
+.topMatchLabel {
+    position: absolute;
+    top: -10px;
+    right: 20px;
+    background-color: #3b82f6;
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: var(--border-radius-sm);
+    box-shadow: 0 4px 8px rgba(59, 130, 246, 0.4);
+}
+
+.techInfo {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.techAvatar {
+    width: 50px;
+    height: 50px;
+    background-color: var(--color-surface-hover);
+    border-radius: 50%;
+    border: 2px solid var(--color-surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--color-primary-light);
+}
+
+.techName {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: 2px;
+}
+
+.techContractor {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+}
+
+.techStars {
+    font-size: 0.85rem;
+    color: #f59e0b;
+    margin-top: 4px;
+}
+
+.techDetails {
+    flex: 1.5;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border-left: 1px solid var(--color-surface-hover);
+    padding-left: var(--spacing-lg);
+}
+
+.techCertRow,
+.techStatus,
+.techRoute {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+}
+
+.techStatus {
+    color: var(--color-text-primary);
+}
+
+.dotArray {
+    width: 8px;
+    height: 8px;
+    background-color: #10b981;
+    border-radius: 50%;
+}
+
+.techScoreArea {
+    flex: 0.8;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-left: 1px solid var(--color-surface-hover);
+    padding-left: var(--spacing-lg);
+    gap: var(--spacing-md);
+}
+
+.scoreCircle {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 4px solid #3b82f6;
+    border-top-color: rgba(59, 130, 246, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--color-text-primary);
+}
+
+.assignBtn {
+    background-color: #3b82f6;
+    color: #fff;
+    width: 100%;
+}
+
+.assignBtn:hover {
+    background-color: #2563eb;
+}
+
+.assignBtn:disabled {
+    background-color: var(--color-surface-hover);
+    cursor: not-allowed;
+}
+
+@media (max-width: 1024px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .techCard {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-md);
+    }
+
+    .techInfo,
+    .techDetails,
+    .techScoreArea {
+        border-left: none;
+        padding-left: 0;
+        width: 100%;
+    }
+
+    .techDetails {
+        border-top: 1px solid var(--color-surface-hover);
+        padding-top: var(--spacing-md);
+        padding-bottom: var(--spacing-md);
+    }
+
+    .techScoreArea {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 1px solid var(--color-surface-hover);
+        padding-top: var(--spacing-md);
+    }
+
+    .assignBtn {
+        width: auto;
+        padding: 12px 24px;
+    }
+}

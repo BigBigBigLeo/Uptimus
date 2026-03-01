@@ -1,0 +1,129 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Core brand colors */
+  --color-bg: #0b0c10;
+  --color-surface: #1f2833;
+  --color-surface-hover: #2c3a47;
+  --color-primary: #45a29e;
+  --color-primary-light: #66fcf1;
+  --color-text-primary: #f8fafc;
+  --color-text-secondary: #94a3b8;
+
+  /* Glassmorphism */
+  --glass-bg: rgba(31, 40, 51, 0.75);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-blur: blur(16px);
+
+  /* Status colors */
+  --color-status-success: #10b981;
+  --color-status-warning: #f59e0b;
+  --color-status-error: #ef4444;
+  --color-status-offline: #6b7280;
+
+  /* Accents based on reference images */
+  --color-accent-blue: #3b82f6;
+  --color-accent-purple: #8b5cf6;
+
+  /* Typography */
+  --font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+  /* Layout & Spacing */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  background-color: var(--color-bg);
+  background-image:
+    radial-gradient(ellipse at top right, rgba(69, 162, 158, 0.12) 0%, transparent 50%),
+    radial-gradient(ellipse at bottom left, rgba(139, 92, 246, 0.12) 0%, transparent 50%);
+  background-attachment: fixed;
+  color: var(--color-text-primary);
+  font-family: var(--font-family-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.auth-form-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  background-color: var(--color-surface);
+  padding: var(--spacing-xl);
+  border-radius: var(--border-radius-lg);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  max-width: 400px;
+  width: 100%;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background-color: var(--color-primary);
+  color: #0b0c10;
+  font-weight: 600;
+  border-radius: var(--border-radius-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  transition: all 0.2s ease-in-out;
+}
+
+button:hover {
+  background-color: var(--color-primary-light);
+  transform: translateY(-1px);
+}
+
+/* TOUCH TARGETS & MOBILE PADDING */
+button,
+a,
+input,
+select {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Responsive Overrides */
+@media (max-width: 768px) {
+  .responsive-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .responsive-hide {
+    display: none !important;
+  }
+
+  .responsive-padding {
+    padding: var(--spacing-md) !important;
+  }
+}
+
+/* Leaflet z-index cap so navigation links float above the map */
+.leaflet-container {
+  z-index: 1 !important;
+}
+
+.custom-marker {
+  background: transparent !important;
+  border: none !important;
+}

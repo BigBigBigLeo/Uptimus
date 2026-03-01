@@ -1,0 +1,73 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Charger {
+  id              String   @id @default(cuid())
+  stationId       String
+  brand           String
+  model           String
+  modelImageUrl   String?
+  powerKw         Float
+  connectorType   String
+  country         String
+  city            String
+  lat             Float
+  lng             Float
+  status          String
+  slaTier         String   @default("Standard") // Standard, Premium, Critical
+  faultCount      Int      @default(0)
+
+  tickets         Ticket[]
+  telemetryLogs   TelemetryLog[]
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Technician {
+  id              String   @id @default(cuid())
+  name            String
+  imageUrl        String?
+  contractor      String
+  country         String
+  lat             Float
+  lng             Float
+  street          String?
+  city            String
+  certs           String   // comma-separated, e.g., "DC Fast Certified, Alpitronic"
+  isAvailable     Boolean  @default(true)
+  avgMttrHours    Float
+  contactPhone    String?
+
+  tickets         Ticket[]
+}
+
+model Ticket {
+  id              String   @id @default(cuid())
+  status          String   @default("Open") // Open, Assigned, En Route, On Site, Completed, Closed
+  faultCode       String
+  slaDeadline     DateTime
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  chargerId       String
+  charger         Charger  @relation(fields: [chargerId], references: [id])
+  
+  technicianId    String?
+  technician      Technician? @relation(fields: [technicianId], references: [id])
+}
+
+model TelemetryLog {
+  id              String   @id @default(cuid())
+  chargerId       String
+  charger         Charger  @relation(fields: [chargerId], references: [id])
+  timestamp       DateTime @default(now())
+  eventType       String   // RemoteReset, FaultTriggered, Offline
+  details         String?
+}

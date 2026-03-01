@@ -1,0 +1,231 @@
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 var(--spacing-xl);
+    height: 72px;
+    background-color: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border-bottom: 1px solid var(--glass-border);
+    color: var(--color-text-primary);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logoSection {
+    display: flex;
+    align-items: center;
+    width: 250px;
+}
+
+.logoLink {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.logoImage {
+    height: 44px;
+    width: auto;
+    object-fit: contain;
+}
+
+.searchSection {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    max-width: 500px;
+}
+
+.searchBar {
+    display: flex;
+    align-items: center;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-surface-hover);
+    border-radius: var(--border-radius-md);
+    padding: 0 var(--spacing-md);
+    width: 100%;
+    height: 40px;
+    transition: border-color 0.2s;
+}
+
+.searchBar:focus-within {
+    border-color: var(--color-primary);
+}
+
+.searchIcon {
+    color: var(--color-text-secondary);
+    margin-right: var(--spacing-sm);
+}
+
+.searchInput {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--color-text-primary);
+    font-size: 0.9rem;
+    outline: none;
+}
+
+.searchInput::placeholder {
+    color: var(--color-text-secondary);
+}
+
+.shortcut {
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+    background: var(--color-bg);
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid var(--color-surface-hover);
+}
+
+.navLinks {
+    display: flex;
+    gap: var(--spacing-xl);
+    margin-left: var(--spacing-xl);
+    flex: 1;
+    justify-content: center;
+}
+
+.navLink,
+.activeLink {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    transition: color 0.2s;
+    padding: var(--spacing-sm) 0;
+    position: relative;
+}
+
+.navLink:hover {
+    color: var(--color-text-primary);
+}
+
+.activeLink {
+    color: var(--color-text-primary);
+}
+
+.activeLink::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--color-primary);
+    border-radius: 2px;
+}
+
+.userSection {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+    justify-content: flex-end;
+    width: 250px;
+}
+
+.notification {
+    position: relative;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+}
+
+.notification:hover {
+    color: var(--color-text-primary);
+}
+
+.redDot {
+    position: absolute;
+    top: 0;
+    right: 2px;
+    width: 8px;
+    height: 8px;
+    background-color: var(--color-status-error);
+    border-radius: 50%;
+    border: 2px solid var(--color-bg);
+}
+
+.userProfile {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    cursor: pointer;
+}
+
+.avatar {
+    width: 36px;
+    height: 36px;
+    background-color: var(--color-surface-hover);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.85rem;
+    border: 2px solid var(--color-surface);
+}
+
+.mobileMenuBtn {
+    display: none;
+    background: transparent;
+    border: none;
+    color: var(--color-text-primary);
+    cursor: pointer;
+    padding: var(--spacing-sm);
+    margin-left: var(--spacing-md);
+}
+
+.mobileMenu {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 72px;
+    left: 0;
+    width: 100%;
+    background-color: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border-bottom: 1px solid var(--glass-border);
+    padding: var(--spacing-md) var(--spacing-xl);
+    gap: var(--spacing-md);
+    z-index: 99;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+.mobileMenu.open {
+    display: flex;
+}
+
+@media (max-width: 900px) {
+    .searchSection {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .header {
+        padding: 0 var(--spacing-md);
+    }
+
+    .navLinks {
+        display: none;
+    }
+
+    .userSection {
+        gap: var(--spacing-md);
+        width: auto;
+    }
+
+    .logoSection {
+        width: auto;
+    }
+
+    .mobileMenuBtn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
