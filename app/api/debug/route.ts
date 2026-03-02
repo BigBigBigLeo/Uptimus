@@ -45,34 +45,99 @@ export async function GET(req: Request) {
 
 async function handleRemoteSeed() {
     try {
-        console.log('[Seed] Starting remote seed trigger...');
+        console.log('[Seed] Starting comprehensive remote seed...');
 
-        // Basic check: only seed if empty to prevent accidental duplicates
+        // 1. Clear existing test data only if it's the single test charger
         const count = await prisma.charger.count();
         if (count > 0) {
-            return NextResponse.json({ message: "Database already contains data. Skipping seed to prevent duplicates." });
+            const testCharger = await prisma.charger.findFirst({ where: { stationId: 'CHG-VERCEL-01' } });
+            if (testCharger && count === 1) {
+                await prisma.charger.deleteMany();
+                await prisma.technician.deleteMany();
+                await prisma.ticket.deleteMany();
+            } else if (count > 5) {
+                return NextResponse.json({ message: "Database already contains multiple records. Skipping to avoid duplicates." });
+            }
         }
 
-        // We'll perform a minimal seed here for a quick fix
-        await prisma.charger.create({
+        // 2. Create Technicians
+        const tech = await prisma.technician.create({
             data: {
-                stationId: 'CHG-VERCEL-01',
-                brand: 'Alpitronic',
-                model: 'Hypercharger',
-                powerKw: 300,
-                connectorType: 'CCS2',
+                name: 'Alex Rivera',
+                contractor: 'Vercel Field Ops',
                 country: 'DE',
-                city: 'Vercel Cloud',
-                lat: 52.52,
-                lng: 13.405,
-                status: 'Available',
-                slaTier: 'Premium'
+                city: 'Berlin',
+                lat: 52.5200,
+                lng: 13.4050,
+                certs: 'DC Fast, HV Level 3',
+                isAvailable: true,
+                avgMttrHours: 18.5
             }
         });
 
+        // 3. Create Chargers (Mix of healthy and faulted)
+        await prisma.charger.createMany({
+            data: [
+                {
+                    stationId: 'CHG-BER-01',
+                    brand: 'Alpitronic',
+                    model: 'HYC300',
+                    powerKw: 300,
+                    connectorType: 'CCS2',
+                    country: 'DE',
+                    city: 'Berlin',
+                    lat: 52.5255,
+                    lng: 13.4000,
+                    status: 'Available',
+                    slaTier: 'Premium'
+                },
+                {
+                    stationId: 'CHG-BER-02',
+                    brand: 'ABB',
+                    model: 'Terra 184',
+                    powerKw: 180,
+                    connectorType: 'CCS2',
+                    country: 'DE',
+                    city: 'Berlin',
+                    lat: 52.5100,
+                    lng: 13.3900,
+                    status: 'Faulted',
+                    faultCount: 3,
+                    slaTier: 'Critical'
+                },
+                {
+                    stationId: 'CHG-BER-03',
+                    brand: 'Siemens',
+                    model: 'Sicharge',
+                    powerKw: 160,
+                    connectorType: 'CCS2',
+                    country: 'DE',
+                    city: 'Berlin',
+                    lat: 52.5350,
+                    lng: 13.4200,
+                    status: 'Offline',
+                    faultCount: 5,
+                    slaTier: 'Standard'
+                }
+            ]
+        });
+
+        // 4. Create a Ticket for one of the faulted chargers
+        const faultedCharger = await prisma.charger.findFirst({ where: { status: 'Faulted' } });
+        if (faultedCharger) {
+            await prisma.ticket.create({
+                data: {
+                    status: 'Open',
+                    faultCode: 'ERR_COOLING_SYSTEM',
+                    slaDeadline: new Date(Date.now() + 86400000), // 24 hours from now
+                    chargerId: faultedCharger.id
+                }
+            });
+        }
+
         return NextResponse.json({
             success: true,
-            message: "Remote seed successful! Created 1 test charger. The dashboard should now load without crashing."
+            message: "Comprehensive seed successful! Created technicians, healthy chargers, and faulted assets. The dashboard manifests and maps should now be fully populated."
         });
     } catch (e: any) {
         return NextResponse.json({
