@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import Topnav from './components/layout/Topnav';
 import SimulationHook from './components/SimulationHook';
 import "./globals.css";
@@ -21,6 +22,7 @@ export default function RootLayout({
         <main style={{ minHeight: 'calc(100vh - 64px)' }}>
           {children}
         </main>
+        <SpeedInsights />
       </body>
     </html>
   );
