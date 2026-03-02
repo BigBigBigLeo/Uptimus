@@ -9,8 +9,27 @@ if (!process.env.DATABASE_URL) {
 
 const globalForPrisma = globalThis as unknown as { prisma: PrismaClient };
 
-export const prisma = globalForPrisma.prisma || new PrismaClient();
+export const prisma = globalForPrisma.prisma || new PrismaClient({
+    log: ['query', 'error', 'warn'],
+});
 
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
+
+// Simple connection check helper (can be used in diagnostic routes)
+export async function checkConnection() {
+    try {
+        await prisma.$queryRaw`SELECT 1`;
+        return { success: true };
+    } catch (error: any) {
+        console.error('[Prisma] Connection Test Failed:', error.message);
+        if (error.message.includes('Can\'t reach database server')) {
+            return { success: false, hint: 'Check if your DATABASE_URL is correct and the database is accessible.' };
+        }
+        if (error.message.includes('password authentication failed')) {
+            return { success: false, hint: 'Database password in DATABASE_URL is incorrect.' };
+        }
+        return { success: false, error: error.message };
+    }
+}
 
 export default prisma;
