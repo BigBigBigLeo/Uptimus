@@ -1,10 +1,8 @@
-import { PrismaClient } from '@prisma/client';
+import prisma from '@/lib/prisma';
 export const dynamic = 'force-dynamic';
 import DispatchClient from './DispatchClient';
 import DispatchLogClient from './DispatchLogClient';
 import Link from 'next/link';
-
-const prisma = new PrismaClient();
 
 export default async function DispatchPage({ searchParams }: { searchParams: Promise<{ ticketId?: string }> }) {
     const { ticketId } = await searchParams;

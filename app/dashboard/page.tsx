@@ -1,10 +1,8 @@
 import styles from './page.module.css';
-import { PrismaClient } from '@prisma/client';
+import prisma from '@/lib/prisma';
 import { Activity, ZapOff, PenTool, AlertTriangle, TrendingDown, Cpu, Wrench, FileCheck, BrainCircuit } from 'lucide-react';
 import Link from 'next/link';
 import DashboardSummaryChart from './components/DashboardCharts';
-
-const prisma = new PrismaClient();
 export const dynamic = 'force-dynamic';
 
 const FAULT_SUMMARY_DATA = [

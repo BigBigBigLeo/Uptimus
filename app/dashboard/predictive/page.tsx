@@ -1,7 +1,5 @@
-import { PrismaClient } from '@prisma/client';
+import prisma from '@/lib/prisma';
 import PredictiveClient from './PredictiveClient';
-
-const prisma = new PrismaClient();
 export const dynamic = 'force-dynamic';
 
 export default async function PredictivePage() {

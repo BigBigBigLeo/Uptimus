@@ -1,11 +1,9 @@
-import { PrismaClient } from '@prisma/client';
+import prisma from '@/lib/prisma';
 export const dynamic = 'force-dynamic';
 import { notFound } from 'next/navigation';
 import styles from './detail.module.css';
 import ChargerActionsClient from './ChargerActionsClient';
 import Link from 'next/link';
-
-const prisma = new PrismaClient();
 
 export default async function ChargerDetailPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;

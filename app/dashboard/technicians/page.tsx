@@ -1,10 +1,8 @@
 import { Users, Filter, Download } from 'lucide-react';
 export const dynamic = 'force-dynamic';
-import { PrismaClient } from '@prisma/client';
+import prisma from '@/lib/prisma';
 import NetworkMap from '../../components/MapWrapper';
 import TechnicianListClient from './TechnicianListClient';
-
-const prisma = new PrismaClient();
 
 export default async function TechniciansPage() {
     const technicians = await prisma.technician.findMany({

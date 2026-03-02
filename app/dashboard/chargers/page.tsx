@@ -1,11 +1,9 @@
-import { PrismaClient } from '@prisma/client';
+import prisma from '@/lib/prisma';
 export const dynamic = 'force-dynamic';
 import ChargerListClient from './ChargerListClient';
 import styles from './chargers.module.css';
 import { Zap, Activity, ShieldCheck } from 'lucide-react';
 import dashStyles from '../page.module.css';
-
-const prisma = new PrismaClient();
 
 export default async function ChargersPage() {
     const chargers = await prisma.charger.findMany({

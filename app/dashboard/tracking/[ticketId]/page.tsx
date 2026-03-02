@@ -1,10 +1,8 @@
-import { PrismaClient } from '@prisma/client';
+import prisma from '@/lib/prisma';
 export const dynamic = 'force-dynamic';
 import { notFound } from 'next/navigation';
 import TrackingClient from './TrackingClient';
 import Link from 'next/link';
-
-const prisma = new PrismaClient();
 
 export default async function TrackingPage({ params }: { params: Promise<{ ticketId: string }> }) {
     const { ticketId } = await params;
